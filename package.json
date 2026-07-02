@@ -1,0 +1,17 @@
+{
+  "name": "budget-policy-ebook-service",
+  "version": "1.0.0",
+  "private": true,
+  "description": "PDF budget policy issue ebook viewer and upload service",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "postinstall": "node copy-vendor.js",
+    "vendor": "node copy-vendor.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "multer": "^2.0.2",
+    "pdfjs-dist": "^6.1.200"
+  }
+}

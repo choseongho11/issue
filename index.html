@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>온라인 예산정책이슈 전자책</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&family=Pretendard:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <aside class="library" aria-label="전자책 목록">
+      <div class="brand">
+        <img class="brand-mark" src="./mark.png" alt="충청남도의회 로고" />
+        <div>
+          <h1>예산정책이슈</h1>
+          <p>온라인 전자책 서비스</p>
+        </div>
+      </div>
+
+      <div id="adminPanel" class="admin-panel" hidden>
+        <span class="admin-badge">● 로컬 관리 도구 연결됨</span>
+        <label class="upload-box">
+          <input id="bookUpload" type="file" accept="application/pdf,.pdf" />
+          <span>+ PDF 업로드</span>
+        </label>
+      </div>
+
+      <div class="search-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+        <input id="bookSearch" type="search" placeholder="제목·목차 검색" autocomplete="off" />
+      </div>
+
+      <nav id="bookList" class="book-list"></nav>
+      <p id="emptyState" class="empty-state">등록된 자료가 없습니다.</p>
+
+      <footer class="library-footer">
+        <p>충청남도의회 예산정책담당관</p>
+      </footer>
+    </aside>
+
+    <main class="reader">
+      <header class="toolbar">
+        <div class="title-group">
+          <span id="bookTitle">전자책을 선택하세요</span>
+          <small id="pageStatus">왼쪽 목록에서 자료를 선택하면 바로 열람할 수 있습니다.</small>
+        </div>
+        <div class="controls">
+          <button id="homeBtn" type="button" title="메인 화면" aria-label="메인 화면">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5" /><path d="M5.5 10v9a1 1 0 0 0 1 1H10v-6h4v6h3.5a1 1 0 0 0 1-1v-9" /></svg>
+          </button>
+          <span class="control-divider"></span>
+          <button id="prevBtn" type="button" title="이전 페이지" aria-label="이전 페이지">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6" /></svg>
+          </button>
+          <button id="nextBtn" type="button" title="다음 페이지" aria-label="다음 페이지">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6" /></svg>
+          </button>
+          <span class="control-divider"></span>
+          <button id="zoomOutBtn" type="button" title="축소" aria-label="축소">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14" /></svg>
+          </button>
+          <button id="zoomInBtn" type="button" title="확대" aria-label="확대">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14" /></svg>
+          </button>
+          <button id="spreadBtn" type="button" title="양면 보기 전환" aria-label="양면 보기 전환">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="8" height="14" rx="1.4" /><rect x="13" y="5" width="8" height="14" rx="1.4" /></svg>
+          </button>
+          <span class="control-divider"></span>
+          <a id="downloadLink" class="download" href="#" download title="PDF 다운로드" aria-label="PDF 다운로드">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5" /><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" /></svg>
+          </a>
+        </div>
+      </header>
+
+      <div class="reader-body">
+        <aside id="tocPanel" class="toc-panel" hidden>
+          <div class="toc-panel-head">
+            <h3>목차</h3>
+            <button id="tocEditBtn" class="toc-edit-btn" type="button" hidden>편집</button>
+          </div>
+          <nav id="tocList" class="toc-list"></nav>
+          <div id="tocEditForm" class="toc-edit-form" hidden>
+            <div id="tocEditRows" class="toc-edit-rows"></div>
+            <button id="tocAddRowBtn" class="toc-add-row-btn" type="button">+ 항목 추가</button>
+            <div class="toc-edit-actions">
+              <button id="tocCancelBtn" class="ghost-btn" type="button">취소</button>
+              <button id="tocSaveBtn" class="primary-btn" type="button">저장</button>
+            </div>
+          </div>
+        </aside>
+
+        <section class="stage-wrap">
+          <button id="leftHit" class="turn-hit left" type="button" aria-label="이전 페이지"></button>
+          <div id="stage" class="stage" aria-live="polite">
+            <div class="welcome">
+              <div class="welcome-icon">
+                <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5c-2-1.4-4.6-2-7-2v13c2.4 0 5 .6 7 2 2-1.4 4.6-2 7-2v-13c-2.4 0-5 .6-7 2z" /><path d="M12 6.5v13" /></svg>
+              </div>
+              <h2>예산정책이슈, 온라인으로 만나보세요</h2>
+              <p>
+                충청남도의회 예산정책담당관실이 발행하는 예산정책이슈를<br />
+                온라인 전자책으로도 제공합니다.<br />
+                왼쪽 목록에서 자료를 선택하면 바로 열람할 수 있고, 제목이나 목차 키워드로<br />
+                원하는 내용을 검색해 바로 이동할 수도 있습니다.
+              </p>
+            </div>
+          </div>
+          <button id="rightHit" class="turn-hit right" type="button" aria-label="다음 페이지"></button>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <p>[ 32416 ] 충청남도 예산군 삽교읍 도청대로 600(의회동) TEL. 041) 635-5204 / FAX. 041)635-5292</p>
+      <p class="copyright">COPYRIGHT © 2026 CHUNGCHEONGNAM-DO COUNCIL. ALL RIGHTS RESERVED</p>
+    </footer>
+
+    <script src="./app.js" type="module"></script>
+  </body>
+</html>
